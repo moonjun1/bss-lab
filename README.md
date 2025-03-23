@@ -1,0 +1,10 @@
+com.bsslab (루트 패키지)
+├── 공통 기능 (common)
+├── 각 기능별 도메인 (domain)
+│   ├── 인증 기능 (auth)
+│   ├── 사용자 기능 (user)
+│   └── 앞으로 만들 게시판 등 기능
+└── 전역 설정 (global)
+    ├── 설정 (config)
+    ├── 예외 처리 (exception)
+    └── 보안 (security)
