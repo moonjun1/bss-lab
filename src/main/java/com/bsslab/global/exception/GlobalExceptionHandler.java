@@ -1,5 +1,6 @@
 package com.bsslab.global.exception;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -115,10 +116,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Schema(description = "에러 응답")
     public static class ErrorResponse {
+        @Schema(description = "HTTP 상태 코드", example = "400")
         private int status;
+
+        @Schema(description = "에러 메시지", example = "Invalid input")
         private String message;
+
+        @Schema(description = "요청 경로", example = "/api/auth/signup")
         private String path;
+
+        @Schema(description = "타임스탬프", example = "2023-01-01T12:00:00")
         private LocalDateTime timestamp;
 
         public ErrorResponse(int status, String message, String path, LocalDateTime timestamp) {
@@ -162,7 +171,9 @@ public class GlobalExceptionHandler {
         }
     }
 
+    @Schema(description = "유효성 검사 에러 응답")
     public static class ValidationErrorResponse extends ErrorResponse {
+        @Schema(description = "필드별 에러 메시지", example = "{\"username\": \"Username is required\", \"email\": \"Email should be valid\"}")
         private Map<String, String> errors;
 
         public ValidationErrorResponse(int status, String message, LocalDateTime timestamp, Map<String, String> errors) {

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * JWT 토큰 관련 유틸리티 클래스
+ */
 @Component
 @Slf4j
 public class JwtUtils {
@@ -25,6 +28,12 @@ public class JwtUtils {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
+    /**
+     * 인증 정보를 기반으로 JWT 토큰 생성
+     *
+     * @param authentication 인증 정보
+     * @return 생성된 JWT 토큰
+     */
     public String generateJwtToken(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
@@ -36,6 +45,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * JWT 토큰에서 사용자 이름 추출
+     *
+     * @param token JWT 토큰
+     * @return 사용자 이름
+     */
     public String getUsernameFromJwtToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -45,20 +60,26 @@ public class JwtUtils {
                 .getSubject();
     }
 
+    /**
+     * JWT 토큰 유효성 검증
+     *
+     * @param authToken 검증할 토큰
+     * @return 유효성 여부
+     */
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
+            log.error("유효하지 않은 JWT 서명: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
+            log.error("유효하지 않은 JWT 토큰: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
+            log.error("만료된 JWT 토큰: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
+            log.error("지원되지 않는 JWT 토큰: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+            log.error("JWT claims 문자열이 비어있음: {}", e.getMessage());
         }
 
         return false;
