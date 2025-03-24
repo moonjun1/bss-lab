@@ -107,7 +107,7 @@ com.bsslab
 
 1. 프로젝트 클론
    ```bash
-   git clone https://github.com/your-username/bsslab-backend.git
+   git clone https://github.com/moonjun1/bss-lab.git
    cd bsslab-backend
    ```
 
