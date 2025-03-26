@@ -1,6 +1,6 @@
 package com.bsslab.domain.admin.controller;
 
-import com.bsslab.domain.post.dto.PostDto;
+import com.bsslab.domain.post.dto.PostListResponse;
 import com.bsslab.domain.post.entity.Post;
 import com.bsslab.domain.post.service.PostService;
 import com.bsslab.global.dto.ApiResponse;
@@ -28,9 +28,9 @@ public class AdminPostController {
 
     @Operation(summary = "모든 게시글 조회(관리자용)", description = "관리자가 모든 게시글을 페이지 단위로 조회합니다.")
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<PostDto.ListResponse>>> getAllPosts(
+    public ResponseEntity<ApiResponse<PageResponse<PostListResponse>>> getAllPosts(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<PostDto.ListResponse> postsPage = postService.getPosts(pageable);
+        Page<PostListResponse> postsPage = postService.getPosts(pageable);
         return ResponseEntity.ok(ApiResponse.success(PageResponse.from(postsPage)));
     }
 

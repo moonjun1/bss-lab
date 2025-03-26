@@ -1,6 +1,7 @@
 package com.bsslab.domain.user.controller;
 
-import com.bsslab.domain.user.dto.UserDto;
+import com.bsslab.domain.user.dto.UpdateProfileRequest;
+import com.bsslab.domain.user.dto.UserInfoResponse;
 import com.bsslab.domain.user.service.UserService;
 import com.bsslab.global.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +25,9 @@ public class UserController {
 
     @Operation(summary = "내 정보 조회", description = "현재 로그인한 사용자의 정보를 조회합니다.")
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserDto.UserInfoResponse>> getMyInfo(
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getMyInfo(
             @AuthenticationPrincipal UserDetails userDetails) {
-        UserDto.UserInfoResponse userInfo = userService.getUserInfo(userDetails.getUsername());
+        UserInfoResponse userInfo = userService.getUserInfo(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponse.success(userInfo));
     }
 
@@ -34,7 +35,7 @@ public class UserController {
     @PutMapping("/me/profile")
     public ResponseEntity<ApiResponse<Void>> updateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UserDto.UpdateProfileRequest request) {
+            @Valid @RequestBody UpdateProfileRequest request) {
         userService.updateProfile(userDetails.getUsername(), request);
         return ResponseEntity.ok(ApiResponse.success("프로필이 성공적으로 수정되었습니다.", null));
     }

@@ -1,6 +1,8 @@
 package com.bsslab.domain.auth.service;
 
-import com.bsslab.domain.auth.dto.AuthDto;
+import com.bsslab.domain.auth.dto.LoginRequest;
+import com.bsslab.domain.auth.dto.SignupRequest;
+import com.bsslab.domain.auth.dto.TokenResponse;
 import com.bsslab.domain.user.entity.User;
 import com.bsslab.domain.user.entity.UserProfile;
 import com.bsslab.domain.user.repository.UserProfileRepository;
@@ -28,7 +30,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     @Transactional
-    public void registerUser(AuthDto.SignupRequest signupRequest) {
+    public void registerUser(SignupRequest signupRequest) {
         // Check if username is already taken
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             throw new DuplicateResourceException("Username is already taken!");
@@ -59,7 +61,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthDto.TokenResponse authenticateUser(AuthDto.LoginRequest loginRequest) {
+    public TokenResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -70,7 +72,7 @@ public class AuthService {
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return AuthDto.TokenResponse.builder()
+        return TokenResponse.builder()
                 .token(jwt)
                 .type("Bearer")
                 .id(user.getId())

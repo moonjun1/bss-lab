@@ -1,6 +1,7 @@
 package com.bsslab.domain.user.service;
 
-import com.bsslab.domain.user.dto.UserDto;
+import com.bsslab.domain.user.dto.UpdateProfileRequest;
+import com.bsslab.domain.user.dto.UserInfoResponse;
 import com.bsslab.domain.user.entity.User;
 import com.bsslab.domain.user.entity.UserProfile;
 import com.bsslab.domain.user.repository.UserProfileRepository;
@@ -19,18 +20,18 @@ public class UserService {
     private final UserProfileRepository userProfileRepository;
 
     @Transactional(readOnly = true)
-    public UserDto.UserInfoResponse getUserInfo(String username) {
+    public UserInfoResponse getUserInfo(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         UserProfile profile = userProfileRepository.findByUser(user)
                 .orElse(null);
 
-        return UserDto.UserInfoResponse.from(user, profile);
+        return UserInfoResponse.from(user, profile);
     }
 
     @Transactional
-    public void updateProfile(String username, UserDto.UpdateProfileRequest request) {
+    public void updateProfile(String username, UpdateProfileRequest request) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
